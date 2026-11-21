@@ -15,24 +15,29 @@ export default function Login() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError('');
+      event.preventDefault();
+      setLoading(true);
+      setError('');
 
-    try {
-      const response = await api.post('/auth/login', form);
-      const { token, user } = response.data;
+      try {
+        const response = await api.post('/auth/login', form);
+        const { token, user } = response.data;
 
-      localStorage.setItem('peerpark_admin_token', token);
-      localStorage.setItem('peerpark_admin_user', JSON.stringify(user));
+        if (user?.role !== 'SuperAdmin') {
+          setError('Access denied. SuperAdmin privileges are required to access this portal.');
+          return;
+        }
 
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+        localStorage.setItem('peerpark_admin_token', token);
+        localStorage.setItem('peerpark_admin_user', JSON.stringify(user));
+
+        navigate('/dashboard');
+      } catch (err) {
+        setError(err.response?.data?.message || 'Login failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-white">
