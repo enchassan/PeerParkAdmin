@@ -26,11 +26,18 @@ export default function Dashboard() {
         const users = usersRes.data?.users?.length || 0;
         const bookingsList = bookingsRes.data?.bookings || [];
         const spots = spotsRes.data?.spots?.length || 0;
-        const revenue = bookingsList.reduce((sum, item) => sum + (Number(item.total_fee) || 0), 0);
+
+        const activeCount = bookingsList.filter((item) =>
+          ['Confirmed', 'Active_Parking'].includes(item.booking_status)
+        ).length;
+
+        const revenue = bookingsList
+          .filter((item) => item.booking_status === 'Completed')
+          .reduce((sum, item) => sum + (Number(item.total_fee) || 0), 0);
 
         setStats({
           users,
-          bookings: bookingsList.length,
+          bookings: activeCount,
           spots,
           revenue,
         });
@@ -48,9 +55,11 @@ export default function Dashboard() {
   const getStatusBadge = (status) => {
     const statusMap = {
       Pending: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30',
-      Active: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30',
-      Completed: 'bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30',
-      Cancelled: 'bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/30',
+      Confirmed: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30',
+      Active_Parking: 'bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30',
+      Completed: 'bg-indigo-500/15 text-indigo-300 ring-1 ring-indigo-500/30',
+      Declined: 'bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/30',
+      Expired: 'bg-slate-500/15 text-slate-300 ring-1 ring-slate-500/30',
     };
 
     return statusMap[status] || 'bg-slate-500/15 text-slate-300 ring-1 ring-slate-500/30';
