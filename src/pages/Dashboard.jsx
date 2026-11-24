@@ -59,6 +59,7 @@ export default function Dashboard() {
       Active_Parking: 'bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30',
       Completed: 'bg-indigo-500/15 text-indigo-300 ring-1 ring-indigo-500/30',
       Declined: 'bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/30',
+      Cancelled: 'bg-slate-500/15 text-slate-300 ring-1 ring-slate-500/30',
       Expired: 'bg-slate-500/15 text-slate-300 ring-1 ring-slate-500/30',
     };
 
